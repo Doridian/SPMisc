@@ -1,7 +1,9 @@
-#include <unistd.h>
+#include <stdlib.h>
 
-int main() {
+int main(int argc, char *argv[]){
 	putenv("PATH=/tmp/busybox:/usr/bin:/bin");
-	execl("/tmp/busybox/sh", "/tmp/busybox/sh", NULL);
+	argv[0] = "sh";
+	execv("/tmp/busybox/sh", argv);
+	return 1; // Never reached
 }
 
