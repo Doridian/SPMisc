@@ -12,4 +12,4 @@ rm -f /tmp/busybox /tmp/dropbear
 mkdir -p /dev/pts
 mount devpts /dev/pts -t devpts
 
-/tmp/dropbear/usr/sbin/dropbear -R -E 2>/dev/null
+/tmp/dropbear/usr/sbin/dropbear -R -E -p 192.168.2.1:22 2>/dev/null
