@@ -13,4 +13,5 @@ rm -f /tmp/busybox /tmp/dropbear /tmp/opt
 mkdir -p /dev/pts
 mount devpts /dev/pts -t devpts
 
+LD_LIBRARY_PATH="/tmp/opt/snmp/lib/" /tmp/opt/snmp/sbin/snmpd -c /tmp/opt/snmp/snmpd.conf 2>/dev/null
 /tmp/dropbear/usr/sbin/dropbear -R -E -p 192.168.2.1:22 2>/dev/null
