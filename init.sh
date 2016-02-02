@@ -1,4 +1,4 @@
-# rm -f /tmp/init.sh; cp /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/user/dfoxadm/init.sh /tmp/init.sh; source /tmp/init.sh
+# rm -f /tmp/init.sh; cp /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/user/dfoxadm/init.sh /tmp/init.sh; source /tmp/init.sh; rm -f /tmp/init.sh
 
 cd /
 
