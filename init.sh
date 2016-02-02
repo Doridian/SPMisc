@@ -3,6 +3,9 @@
 mkdir -p /tmp/usbmount
 mount -o exec /dev/sda1 /tmp/usbmount
 
+ip route add 169.254.0.0/16 dev br0
+ip route del 169.0.0.0/8 dev br0
+
 rm -f /tmp/busybox /tmp/dropbear /tmp/opt
 /tmp/usbmount/user/dfoxadm/busybox/ln -s /tmp/usbmount/user/dfoxadm/busybox /tmp
 /tmp/busybox/ln -s /tmp/usbmount/user/dfoxadm/dropbear /tmp
