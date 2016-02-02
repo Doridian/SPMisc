@@ -1,14 +1,12 @@
-# rm -f /tmp/init.sh; cp /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/user/dfoxadm/init.sh /tmp/init.sh; source /tmp/init.sh; rm -f /tmp/init.sh
+# sh /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/user/dfoxadm/init.sh
 
-cd /
-
-umount /dev/sda1
-mount /dev/sda1 /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1 
+mkdir -p /tmp/usbmount
+mount -o exec /dev/sda1 /tmp/usbmount
 
 rm -f /tmp/busybox /tmp/dropbear /tmp/opt
-/mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/user/dfoxadm/busybox/ln -s /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/user/dfoxadm/busybox /tmp
-/tmp/busybox/ln -s /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/user/dfoxadm/dropbear /tmp
-/tmp/busybox/ln -s /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/user/dfoxadm/opt /tmp
+/tmp/usbmount/user/dfoxadm/busybox/ln -s /tmp/usbmount/user/dfoxadm/busybox /tmp
+/tmp/busybox/ln -s /tmp/usbmount/user/dfoxadm/dropbear /tmp
+/tmp/busybox/ln -s /tmp/usbmount/user/dfoxadm/opt /tmp
 
 mkdir -p /dev/pts
 mount devpts /dev/pts -t devpts
