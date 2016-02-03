@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <at_if.h>
 
-// /opt/toolchains/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21/usr/bin/mips-unknown-linux-uclibc-gcc -I/opt/DT_Hybrid_GPL_1.00.053/DT-W724V-20140311/output/host/usr/mips-unknown-linux-uclibc/sysroot/usr/include -L/opt/DT_Hybrid_GPL_1.00.053/DT-W724V-20140311/output/host/usr/mips-unknown-linux-uclibc/sysroot/lib lteq.c -o lteq -lcfmapi -lvdb -lsqlite -lhttpapi -lmsgapi -lxmlapi -lbhalapi -lcrypto -lssl -lcrypto -lz -liconv -lpthread -lgplutil -latshared -ldl
+// /opt/toolchains/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21/usr/bin/mips-unknown-linux-uclibc-gcc -I/opt/DT_Hybrid_GPL_1.00.053/DT-W724V-20140311/output/host/usr/mips-unknown-linux-uclibc/sysroot/usr/include -L/opt/DT_Hybrid_GPL_1.00.053/DT-W724V-20140311/output/host/usr/mips-unknown-linux-uclibc/sysroot/lib lteq.c -o lteq -lcfmapi -lvdb -lsqlite -lhttpapi -lmsgapi -lxmlapi -lbhalapi -lcrypto -lssl -lz -liconv -lpthread -lgplutil -latshared -ldl
 
 int main() {
 	LcellinfoResType res;
