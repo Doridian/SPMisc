@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
-// /opt/toolchains/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21/usr/bin/mips-unknown-linux-uclibc-gcc dslq.c dslq
+// /opt/toolchains/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21/usr/bin/mips-unknown-linux-uclibc-gcc dslinfo.c dslinfo
 int main() {
 	const char* queryString = getenv("QUERY_STRING");
 	const int queryStringLen = strlen(queryString);
