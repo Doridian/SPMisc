@@ -10,7 +10,7 @@ int main() {
 	printf("Content-Type: application/json\n\n");
 
 	ret = AT_Lcellinfo(AT_CMD_TYPE_CHECK, NULL, &res);
-	if (!ret || res.AtExeResult != AT_CMD_RES_SUCCESS) {
+	if (!ret && res.AtExeResult == AT_CMD_RES_SUCCESS) {
 		printf("{\"success\": true, \"rsrp\": %s, \"rsrq\": %s, \"rssi\": %s, \"freq\": %s, \"band\": %s, \"cellId\": %s}\n", res.Rsrp, res.Rsrq, res.Rssi, res.Freq, res.Band, res.CellId);
 		return 0;
 	} else {
