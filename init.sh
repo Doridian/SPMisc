@@ -19,3 +19,5 @@ mount devpts /dev/pts -t devpts
 LD_LIBRARY_PATH="/tmp/opt/snmp/lib:/lib:/usr/lib" /tmp/opt/snmp/sbin/snmpd -c /tmp/opt/snmp/snmpd.conf 2>/dev/null
 /tmp/dropbear/usr/sbin/dropbear -R -E -p 192.168.2.1:22 2>/dev/null
 /tmp/busybox/httpd -p 192.168.2.1:81 -h /tmp/opt/var/www -c /tmp/opt/var/www.conf 2>/dev/null
+LD_LIBRARY_PATH="/tmp/opt/lib:/tmp/opt/usr/lib:/lib:/usr/lib" /tmp/opt/bin/dhcp6update.sh 2>/dev/null
+
