@@ -15,13 +15,14 @@ fi
 
 FULLPREFIX="${FULLPREFIX}00::/56"
 
-if xtables-multi ip6tables-save | grep -qF "commentipv6route"; then
+if xtables-multi ip6tables-save | grep -qF "$FULLPREFIX"; then
 	echo 'IPv6 /60 FWL ok'
 else
 	ip6tables -t mangle -A PRE_LAN_SUBNET -s "$FULLPREFIX" -i br0 -j ACCEPT --comment commentipv6route
 	ip6tables -t mangle -I ROUTE_CTL_LIST -d "$FULLPREFIX" -j RETURN --comment commentipv6route
 	ip6tables -F FORWARD_PREFIX
 	ip6tables -A FORWARD_PREFIX ! -s "$FULLPREFIX" -i br0 -j REJECT --reject-with icmp6-dst-unreachable --comment commentipv6route
+	echo 'IPv6 /60 FWL fixed'
 fi
 
 if xtables-multi ip6tables-save | grep -qF "commentipv6dmz"; then
@@ -31,6 +32,7 @@ else
 	ip6tables -A FORWARD_FIREWALL -i gre+ -o br0 -j ACCEPT --comment commentipv6dmz
 	ip6tables -A FORWARD_FIREWALL -i ppp256 -o br0 -j ACCEPT --comment commentipv6dmz
 	ip6tables -A FORWARD_FIREWALL ! -i br+ -j DROP --comment commentipv6dmz
+	echo 'IPv6 DMZ fixed'
 fi
 
 if xtables-multi iptables-save | grep -qF "commentipv4dmz"; then
@@ -40,6 +42,7 @@ else
 	iptables -t nat -A PREROUTING -i ppp256 -j DNAT --to-destination 192.168.2.2 --comment commentipv4dmz
 	iptables -A FWD_SERVICE -d 192.168.2.2 -i gre+ -j ACCEPT --comment commentipv4dmz
 	iptables -A FWD_SERVICE -d 192.168.2.2 -i ppp256 -j ACCEPT --comment commentipv4dmz
+	echo 'IPv4 DMZ fixed'
 fi
 
 sed "s~pd-pool .*~pd-pool $FULLLANPREFIX~" -i /usr/local/etc/dibbler/server.conf
