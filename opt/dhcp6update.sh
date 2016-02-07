@@ -18,8 +18,8 @@ FULLPREFIX="${FULLPREFIX}00::/56"
 if xtables-multi ip6tables-save | grep -qF "commentipv6route"; then
 	echo 'IPv6 /60 FWL ok'
 else
-	ip6tables -t mangle -A PRE_LAN_SUBNET -s "$FULLLANPREFIX" -i br0 -j ACCEPT --comment commentipv6route
-	ip6tables -t mangle -I ROUTE_CTL_LIST -d "$FULLLANPREFIX" -j RETURN --comment commentipv6route
+	ip6tables -t mangle -A PRE_LAN_SUBNET -s "$FULLPREFIX" -i br0 -j ACCEPT --comment commentipv6route
+	ip6tables -t mangle -I ROUTE_CTL_LIST -d "$FULLPREFIX" -j RETURN --comment commentipv6route
 	ip6tables -F FORWARD_PREFIX
 	ip6tables -A FORWARD_PREFIX ! -s "$FULLPREFIX" -i br0 -j REJECT --reject-with icmp6-dst-unreachable --comment commentipv6route
 fi
