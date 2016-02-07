@@ -42,7 +42,7 @@ else
 	iptables -A FWD_SERVICE -d 192.168.2.2 -i ppp256 -j ACCEPT --comment commentipv4dmz
 fi
 
-sed "s~pd-pool .*~pd-pool $FULLLANPREFIX~" -i /tmp/opt/usr/etc/dibbler/server.conf
-/tmp/opt/usr/sbin/dibbler-server stop
-/tmp/opt/usr/sbin/dibbler-server start
+sed "s~pd-pool .*~pd-pool $FULLLANPREFIX~" -i /usr/local/etc/dibbler/server.conf
+/usr/local/sbin/dibbler-server stop
+/usr/local/sbin/dibbler-server start
 
