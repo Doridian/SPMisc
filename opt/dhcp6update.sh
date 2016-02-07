@@ -16,7 +16,21 @@ fi
 FULLPREFIX="${FULLPREFIX}00::/56"
 
 if xtables-multi ip6tables-save | grep -qF "$TLANPREFIX"; then
-	xtables-multi ip6tables-save | grep -vF "/56" | sed "s~$TLANPREFIX~$FULLPREFIX~g" | xtables-multi ip6tables-restore
+	xtables-multi ip6tables-save | grep -vF '/56' | sed "s~$TLANPREFIX~$FULLPREFIX~g" | xtables-multi ip6tables-restore
+fi
+
+if xtables-multi ip6tables-save | grep -qF "commentipv6dmz"; then
+	ip6tables -D FORWARD_FIREWALL ! -i br+ -j DROP
+	ip6tables -A FORWARD_FIREWALL -i gre+ -o br0 -j ACCEPT --comment commentipv6dmz
+	ip6tables -A FORWARD_FIREWALL -i ppp256 -o br0 -j ACCEPT --comment commentipv6dmz
+	ip6tables -A FORWARD_FIREWALL ! -i br+ -j DROP --comment commentipv6dmz
+fi
+
+if xtables-multi iptables-save | grep -qF "commentipv4dmz"; then
+	iptables -t nat -A PREROUTING -i gre+ -j DNAT --to-destination 192.168.2.2 --comment commentipv4dmz
+	iptables -t nat -A PREROUTING -i ppp256 -j DNAT --to-destination 192.168.2.2 --comment commentipv4dmz
+	iptables -A FWD_SERVICE -d 192.168.2.2 -i gre+ -j ACCEPT --comment commentipv4dmz
+	iptables -A FWD_SERVICE -d 192.168.2.2 -i ppp256 -j ACCEPT --comment commentipv4dmz
 fi
 
 sed "s~pd-pool .*~pd-pool $FULLLANPREFIX~" -i /tmp/opt/usr/etc/dibbler/server.conf
