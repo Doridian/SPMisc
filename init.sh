@@ -14,8 +14,11 @@ mount --bind /opt/home /home
 mkdir -p /dev/pts
 mount devpts /dev/pts -t devpts
 
-LD_LIBRARY_PATH="/usr/local/lib:/lib:/usr/lib" /usr/local/sbin/snmpd -c /usr/local/etc/snmpd.conf 2>/dev/null
+export LD_LIBRARY_PATH="/usr/local/lib:/lib:/usr/lib"
+
+/usr/local/sbin/snmpd -c /usr/local/etc/snmpd.conf 2>/dev/null
 /usr/local/sbin/dropbear -R -p 192.168.2.1:22 2>/dev/null
 /usr/local/bin/httpd -p 192.168.2.1:81 -h /usr/local/var/www -c /usr/local/etc/httpd.conf 2>/dev/null
-LD_LIBRARY_PATH="/usr/local/lib:/lib:/usr/lib" /usr/local/bin/dhcp6update.sh 2>/dev/null
+/usr/local/bin/crond -L /usr/local/var/log/cron.log -c /usr/local/var/lib/cron 2> /dev/null
 
+#/usr/local/bin/dhcp6update.sh 2>/dev/null
