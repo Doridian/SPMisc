@@ -5,8 +5,8 @@
 int main(int argc, char *argv[]){
 	putenv("PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin");
 	putenv("LD_LIBRARY_PATH=/usr/local/lib:/lib:/usr/lib");
-	argv[0] = "sh";
-	execv("/usr/local/bin/sh", argv);
+	argv[0] = "mysh";
+	execv("/usr/local/bin/mysh", argv);
 	return 1; // Never reached
 }
 
