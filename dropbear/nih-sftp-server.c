@@ -874,7 +874,7 @@ static void sftp_readdir(void)
         if (p_entry)
         {
             /* Ignore entries we can't stat */
-            if (fstatat(p_handle->fd, p_entry->d_name, &st, 0) < 0)
+            if (fstatat(p_handle->fd, p_entry->d_name, &st, AT_SYMLINK_NOFOLLOW) < 0)
             {
                 continue;
             }
