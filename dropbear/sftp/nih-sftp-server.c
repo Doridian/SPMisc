@@ -53,6 +53,7 @@ _BSD_SOURCE for futimes; otherwise sftp_fsetstat() will return unsupported
 #include <errno.h>  /* errno, EBADF etc */
 
 #include "strmode.h"
+#include "pwcache.h"
 
 /* POSIX and friends */
 #include <unistd.h> /* Many things */
@@ -883,8 +884,8 @@ static void sftp_readdir(void)
                 continue;
             }
 
-            char user = user_from_uid(st.st_uid, 0);
-            char group = group_from_gid(st.st_gid, 0);
+            const char* user = user_from_uid(st.st_uid, 0);
+            const char* group = group_from_gid(st.st_gid, 0);
             int ulen = MAX(strlen(user), 8);
             int glen = MAX(strlen(group), 8);
 
