@@ -850,7 +850,9 @@ static void sftp_readdir(void)
     struct dirent *p_entry;
     uint32_t id = get_uint32();
     fxp_handle_t *p_handle = get_handle();
+
     char buf[1024], modebuf[11+1];
+    time_t now = time(NULL);
 
     if (!p_handle)
     {
@@ -880,10 +882,30 @@ static void sftp_readdir(void)
             {
                 continue;
             }
+
+            char user = user_from_uid(st.st_uid, 0);
+            char group = group_from_gid(st.st_gid, 0);
+            int ulen = MAX(strlen(user), 8);
+            int glen = MAX(strlen(group), 8);
+
+            int sz = 0;
+            struct tm *ltime = localtime(&st.st_mtime);
+            if (ltime != NULL) {
+                if (now - (365*24*60*60)/2 < st.st_mtime &&
+                    now >= st.st_mtime)
+                    sz = strftime(tbuf, sizeof tbuf, "%b %e %H:%M", ltime);
+                else
+                    sz = strftime(tbuf, sizeof tbuf, "%b %e  %Y", ltime);
+            }
+            if (sz == 0)
+                tbuf[0] = '\0';
+
             strmode(st.st_mode, modebuf);
-            snprintf(buf, sizeof buf, "%s %d %d %lld %d %s",
-                modebuf, st.st_uid, st.st_gid, (long long)st.st_size,(int) st.st_mtime,
+
+            snprintf(buf, sizeof buf, "%s %3u %-*s %-*s %8llu %s %s",
+                modebuf, st.st_nlink, ulen, user, glen, group, (unsigned long long)st.st_size, tbuf,
                 p_entry->d_name);
+
             /* If the entry will fit in the buffer */
             if ((strlen(buf) + sizeof(uint32_t) + strlen(p_entry->d_name) + sizeof(uint32_t) + MAX_ATTRS_BYTES) <= obuff.count)
             {
