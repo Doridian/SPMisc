@@ -848,7 +848,7 @@ static void sftp_readdir(void)
     struct dirent *p_entry;
     uint32_t id = get_uint32();
     fxp_handle_t *p_handle = get_handle();
-    char buf[1024];
+    char buf[1024], modebuf[11+1];
 
     if (!p_handle)
     {
@@ -878,8 +878,9 @@ static void sftp_readdir(void)
             {
                 continue;
             }
-            snprintf(buf, sizeof buf, "0%o %d %d %lld %d %s",
-                st.st_mode, st.st_uid, st.st_gid, (long long)st.st_size,(int) st.st_mtime,
+            strmode(st.st_mode, modebuf);
+            snprintf(buf, sizeof buf, "%s %3u %d %d %lld %d %s",
+                modebuf, st.st_nlink, st.st_uid, st.st_gid, (long long)st.st_size,(int) st.st_mtime,
                 p_entry->d_name);
             /* If the entry will fit in the buffer */
             if ((strlen(buf) + sizeof(uint32_t) + strlen(p_entry->d_name) + sizeof(uint32_t) + MAX_ATTRS_BYTES) <= obuff.count)
