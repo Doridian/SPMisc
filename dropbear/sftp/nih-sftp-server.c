@@ -881,8 +881,8 @@ static void sftp_readdir(void)
                 continue;
             }
             strmode(st.st_mode, modebuf);
-            snprintf(buf, sizeof buf, "%s %3u %d %d %lld %d %s",
-                modebuf, st.st_nlink, st.st_uid, st.st_gid, (long long)st.st_size,(int) st.st_mtime,
+            snprintf(buf, sizeof buf, "%s %d %d %lld %d %s",
+                modebuf, st.st_uid, st.st_gid, (long long)st.st_size,(int) st.st_mtime,
                 p_entry->d_name);
             /* If the entry will fit in the buffer */
             if ((strlen(buf) + sizeof(uint32_t) + strlen(p_entry->d_name) + sizeof(uint32_t) + MAX_ATTRS_BYTES) <= obuff.count)
