@@ -53,7 +53,6 @@ _BSD_SOURCE for futimes; otherwise sftp_fsetstat() will return unsupported
 #include <errno.h>  /* errno, EBADF etc */
 
 #include "strmode.h"
-#include "pwcache.h"
 
 /* POSIX and friends */
 #include <unistd.h> /* Many things */
@@ -884,11 +883,6 @@ static void sftp_readdir(void)
                 continue;
             }
 
-            const char* user = user_from_uid(st.st_uid, 0);
-            const char* group = group_from_gid(st.st_gid, 0);
-            int ulen = MAX(strlen(user), 8);
-            int glen = MAX(strlen(group), 8);
-
             int sz = 0;
             struct tm *ltime = localtime(&st.st_mtime);
             if (ltime != NULL) {
@@ -903,8 +897,8 @@ static void sftp_readdir(void)
 
             strmode(st.st_mode, modebuf);
 
-            snprintf(buf, sizeof buf, "%s %3u %-*s %-*s %8llu %s %s",
-                modebuf, st.st_nlink, ulen, user, glen, group, (unsigned long long)st.st_size, tbuf,
+            snprintf(buf, sizeof buf, "%s %3u %-*d %-*d %8llu %s %s",
+                modebuf, st.st_nlink, 8, st.st_uid, 8, st.st_gid, (unsigned long long)st.st_size, tbuf,
                 p_entry->d_name);
 
             /* If the entry will fit in the buffer */
