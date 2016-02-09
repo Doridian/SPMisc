@@ -851,7 +851,7 @@ static void sftp_readdir(void)
     uint32_t id = get_uint32();
     fxp_handle_t *p_handle = get_handle();
 
-    char buf[1024], modebuf[11+1];
+    char buf[1024], modebuf[11+1], tbuf[12+1];
     time_t now = time(NULL);
 
     if (!p_handle)
