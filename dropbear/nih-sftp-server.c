@@ -49,6 +49,7 @@ _BSD_SOURCE for futimes; otherwise sftp_fsetstat() will return unsupported
 #include <stdlib.h> /* exit() */
 #include <stdio.h> /* fprintf() */
 #include <string.h> /* Memmove */
+#include <bsd/string.h>
 #include <assert.h>
 #include <errno.h>  /* errno, EBADF etc */
 
