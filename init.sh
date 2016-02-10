@@ -1,5 +1,5 @@
-# source /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/init.sh
-# cat /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/init.sh
+# source /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/usr/local/sbin/init.sh
+# cat /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/usr/local/sbin/init.sh
 
 mount -o exec /dev/sda1 /opt
 
