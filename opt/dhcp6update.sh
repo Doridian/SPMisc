@@ -27,8 +27,16 @@ else
 	ip6tables -t mangle -I ROUTE_CTL_LIST -d $FULLLANPREFIX -j RETURN
 	ip6tables -F FORWARD_PREFIX
 	ip6tables -A FORWARD_PREFIX ! -s $FULLPREFIX -i br0 -j REJECT --reject-with icmp6-dst-unreachable
+
+	ip6tables -D FORWARD_FIREWALL ! -i br+ -j DROP
+	ip6tables -A FORWARD_FIREWALL -d $FULLLANPREFIX -i gre+ -o br0 -j ACCEPT
+	ip6tables -A FORWARD_FIREWALL -d $FULLLANPREFIX -i ppp256 -o br0 -j ACCEPT
+	ip6tables -A FORWARD_FIREWALL ! -i br+ -j DROP
+
 	echo "ip6tables -t mangle -D PRE_LAN_SUBNET -s $FULLLANPREFIX -i br0 -j ACCEPT" >> /var/undo_ipv6_fwl.sh
 	echo "ip6tables -t mangle -D ROUTE_CTL_LIST -d $FULLLANPREFIX -j RETURN" >> /var/undo_ipv6_fwl.sh
+	echo "ip6tables -D FORWARD_FIREWALL -d $FULLLANPREFIX -i gre+ -o br0 -j ACCEPT" >> /var/undo_ipv6_fwl.sh
+	echo "ip6tables -D FORWARD_FIREWALL -d $FULLLANPREFIX -i ppp256 -o br0 -j ACCEPT" >> /var/undo_ipv6_fwl.sh
 	echo 'IPv6 /56 FWL fixed'
 fi
 
@@ -48,28 +56,6 @@ else
 	echo "/bin/ip -6 route del $FULLLANPREFIX dev br0 metric 256 table 201" >> /var/undo_ipv6_route.sh
 	echo "IPv6 $FULLLANPREFIX route fixed"
 fi
-
-#ip -6 addr add "$FULLLANPREFIX" dev br0
-
-#if xtables-multi ip6tables-save | grep -qF "commentipv6dmz"; then
-#	echo 'IPv6 DMZ ok'
-#else
-#	ip6tables -D FORWARD_FIREWALL ! -i br+ -j DROP
-#	ip6tables -A FORWARD_FIREWALL -i gre+ -o br0 -j ACCEPT --comment commentipv6dmz
-#	ip6tables -A FORWARD_FIREWALL -i ppp256 -o br0 -j ACCEPT --comment commentipv6dmz
-#	ip6tables -A FORWARD_FIREWALL ! -i br+ -j DROP --comment commentipv6dmz
-#	echo 'IPv6 DMZ fixed'
-#fi
-
-#if xtables-multi iptables-save | grep -qF "commentipv4dmz"; then
-#	echo 'IPv4 DMZ ok'
-#else
-#	iptables -t nat -A PREROUTING -i gre+ -j DNAT --to-destination 192.168.2.2 --comment commentipv4dmz
-#	iptables -t nat -A PREROUTING -i ppp256 -j DNAT --to-destination 192.168.2.2 --comment commentipv4dmz
-#	iptables -A FWD_SERVICE -d 192.168.2.2 -i gre+ -j ACCEPT --comment commentipv4dmz
-#	iptables -A FWD_SERVICE -d 192.168.2.2 -i ppp256 -j ACCEPT --comment commentipv4dmz
-#	echo 'IPv4 DMZ fixed'
-#fi
 
 OLDMD5SUM="$(md5sum /usr/local/etc/dibbler/server.conf)"
 sed "s~pd-pool .*~pd-pool $FULLLANPREFIX~" -i /usr/local/etc/dibbler/server.conf
