@@ -18,19 +18,34 @@ FULLPREFIX="${FULLPREFIX}00::/56"
 if xtables-multi ip6tables-save | grep -qF "$FULLPREFIX"; then
 	echo 'IPv6 /56 FWL ok'
 else
-	ip6tables -t mangle -A PRE_LAN_SUBNET -s "$FULLLANPREFIX" -i br0 -j ACCEPT
-	ip6tables -t mangle -I ROUTE_CTL_LIST -d "$FULLLANPREFIX" -j RETURN
+	if [ -f /var/undo_ipv6_fwl.sh ]; then
+		source /var/undo_ipv6_fwl.sh
+	fi
+	echo > /var/undo_ipv6_fwl.sh
+	chmod -x /var/undo_ipv6_fwl.sh
+	ip6tables -t mangle -A PRE_LAN_SUBNET -s $FULLLANPREFIX -i br0 -j ACCEPT
+	ip6tables -t mangle -I ROUTE_CTL_LIST -d $FULLLANPREFIX -j RETURN
 	ip6tables -F FORWARD_PREFIX
-	ip6tables -A FORWARD_PREFIX ! -s "$FULLPREFIX" -i br0 -j REJECT --reject-with icmp6-dst-unreachable
+	ip6tables -A FORWARD_PREFIX ! -s $FULLPREFIX -i br0 -j REJECT --reject-with icmp6-dst-unreachable
+	echo "ip6tables -t mangle -D PRE_LAN_SUBNET -s $FULLLANPREFIX -i br0 -j ACCEPT" >> /var/undo_ipv6_fwl.sh
+	echo "ip6tables -t mangle -D ROUTE_CTL_LIST -d $FULLLANPREFIX -j RETURN" >> /var/undo_ipv6_fwl.sh
 	echo 'IPv6 /56 FWL fixed'
 fi
 
 if ip -6 route | grep -qF "$FULLLANPREFIX"; then
 	echo "IPv6 $FULLLANPREFIX route ok"
 else
-	/bin/ip -6 route add "$FULLLANPREFIX" dev br0 metric 256
-	/bin/ip -6 route add "$FULLLANPREFIX" dev br0 metric 256 table 200
-	/bin/ip -6 route add "$FULLLANPREFIX" dev br0 metric 256 table 201
+	if [ -f /var/undo_ipv6_route.sh ]; then
+		source /var/undo_ipv6_route.sh
+	fi
+	echo > /var/undo_ipv6_route.sh
+	chmod -x /var/undo_ipv6_route.sh
+	/bin/ip -6 route add $FULLLANPREFIX dev br0 metric 256
+	/bin/ip -6 route add $FULLLANPREFIX dev br0 metric 256 table 200
+	/bin/ip -6 route add $FULLLANPREFIX dev br0 metric 256 table 201
+	echo "/bin/ip -6 route del $FULLLANPREFIX dev br0 metric 256" >> /var/undo_ipv6_route.sh
+	echo "/bin/ip -6 route del $FULLLANPREFIX dev br0 metric 256 table 200" >> /var/undo_ipv6_route.sh
+	echo "/bin/ip -6 route del $FULLLANPREFIX dev br0 metric 256 table 201" >> /var/undo_ipv6_route.sh
 	echo "IPv6 $FULLLANPREFIX route fixed"
 fi
 
