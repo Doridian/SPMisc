@@ -80,4 +80,5 @@ if [ "$OLDMD5SUM" != "$NEWMD5SUM" ]; then
 else
 	echo "DHCPv6 is OK"
 fi
-/usr/local/sbin/dibbler-server start
+/usr/local/sbin/dibbler-server status || /usr/local/sbin/dibbler-server start
+
