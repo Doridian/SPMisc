@@ -56,7 +56,13 @@ fi
 #	echo 'IPv4 DMZ fixed'
 #fi
 
+OLDMD5SUM="$(md5sum /usr/local/etc/dibbler/server.conf)"
 sed "s~pd-pool .*~pd-pool $FULLLANPREFIX~" -i /usr/local/etc/dibbler/server.conf
-/usr/local/sbin/dibbler-server stop
+NEWMD5SUM="$(md5sum /usr/local/etc/dibbler/server.conf)"
+if [ "$OLDMD5SUM" != "$NEWMD5SUM" ]; then
+	echo "Restarting DHCPv6"
+	/usr/local/sbin/dibbler-server stop
+else
+	echo "DHCPv6 is OK"
+fi
 /usr/local/sbin/dibbler-server start
-
