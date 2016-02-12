@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
-// /opt/toolchains/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21/usr/bin/mips-unknown-linux-uclibc-gcc dslinfo.c dslinfo
+// /opt/toolchains/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21/usr/bin/mips-unknown-linux-uclibc-gcc dslinfo.c -o dslinfo
 int main() {
 	const char* queryString = getenv("QUERY_STRING");
 	const int queryStringLen = strlen(queryString);
@@ -35,6 +35,8 @@ int main() {
 	} while(*(++queryStringCur));
 
 	snprintf(dslparam, 127, "--%s", queryString);
+
+	fflush(stdout);
 	execl("/bin/xdslcmd", "/bin/xdslcmd", "info", dslparam, NULL);
 	return 1;
 }
