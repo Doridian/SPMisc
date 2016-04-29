@@ -13,10 +13,11 @@ mkdir -p /dev/pts
 mount devpts /dev/pts -t devpts
 
 export LD_LIBRARY_PATH="/usr/local/lib:/lib:/usr/lib"
+export PATH="/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin"
 
-/usr/local/sbin/snmpd -c /usr/local/etc/snmpd.conf 2>/dev/null
-/usr/local/sbin/dropbear -R -p 192.168.2.1:22 2>/dev/null
-/usr/local/bin/httpd -p 192.168.2.1:81 -h /usr/local/var/www -c /usr/local/etc/httpd.conf 2>/dev/null
-/usr/local/bin/crond -L /usr/local/var/log/cron.log -c /usr/local/var/lib/cron 2> /dev/null
+snmpd -c /usr/local/etc/snmpd.conf
+dropbear -R -p 192.168.2.1:22
+httpd -p 192.168.2.1:81 -h /usr/local/var/www -c /usr/local/etc/httpd.conf
+crond -L /usr/local/var/log/cron.log -c /usr/local/var/lib/cron
 
-#/usr/local/bin/dhcp6update.sh 2>/dev/null
+dhcp6update.sh
