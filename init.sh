@@ -20,4 +20,5 @@ dropbear -R -p 192.168.2.1:22
 httpd -p 192.168.2.1:81 -h /usr/local/var/www -c /usr/local/etc/httpd.conf
 crond -L /usr/local/var/log/cron.log -c /usr/local/var/lib/cron
 
-dhcp6update.sh
+nflx.sh
+#dhcp6update.sh
