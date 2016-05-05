@@ -21,4 +21,5 @@ httpd -p 192.168.2.1:81 -h /usr/local/var/www -c /usr/local/etc/httpd.conf
 crond -L /usr/local/var/log/cron.log -c /usr/local/var/lib/cron
 
 nflx.sh
+radvdfix.sh
 #dhcp6update.sh
