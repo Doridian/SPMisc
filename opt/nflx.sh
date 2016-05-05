@@ -1,18 +1,31 @@
 #!/usr/local/bin/sh
 
-if xtables-multi iptables-save | grep -qF 'FORWARD -j NFLXBLOCK_FWD'; then
+FAIL=0
+
+if xtables-multi iptables-save | grep -qF 'j NFLXBLOCK_FWD'; then
 	echo 'NflxBlock chain OK'
 else
+	echo 'NflxBlock chain FAIL'
 	iptables -N NFLXBLOCK_FWD
-	iptables -I FORWARD -j NFLXBLOCK_FWD
+	iptables -I FORWARD -s 192.168.2.0/24 -j NFLXBLOCK_FWD
+	FAIL=1
 fi
 
-if xtables-multi iptables-save | grep -qF 'PREROUTING -j NFLXBLOCK_DNSNAT'; then
+if xtables-multi iptables-save | grep -qF 'j NFLXBLOCK_DNSNAT'; then
 	echo 'NflxDnsNAT chain OK'
 else
+	echo 'NflxDnsNAT chain FAIL'
 	iptables -t nat -N NFLXBLOCK_DNSNAT
-	iptables -t nat -I PREROUTING -j NFLXBLOCK_DNSNAT
+	iptables -t nat -I PREROUTING -s 192.168.2.0/24 -j NFLXBLOCK_DNSNAT
+	FAIL=1
 fi
+
+if [ $FAIL -eq 0 ]; then
+	echo 'All good -> quit'
+	exit 0
+fi
+
+echo 'Redoing chains'
 
 iptables -F NFLXBLOCK_FWD
 
