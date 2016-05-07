@@ -3,8 +3,7 @@
 
 mount -o exec /dev/sda1 /opt
 
-ip route add 169.254.0.0/16 dev br0
-ip route del 169.0.0.0/8 dev br0
+ifconfig br0:9 169.254.100.156 netmask 255.255.0.0
 
 mount --bind /opt/usrlocal /usr/local
 mount --bind /opt/home /home
