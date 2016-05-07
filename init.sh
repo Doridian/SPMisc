@@ -1,6 +1,17 @@
 # source /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/init.sh
 # cat /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/init.sh
 
+if [ ! -d "/opt" ]; then
+  echo 'Run mkdirs'
+  source /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/mkdirs.sh
+fi
+
+if mount | grep -qF "/usr/local"; then
+  echo 'We are already good'
+  echo RDY
+  exit 0
+fi
+
 mount -o exec /dev/sda1 /opt
 
 ifconfig br0:9 169.254.100.156 netmask 255.255.0.0
@@ -21,4 +32,4 @@ crond -L /usr/local/var/log/cron.log -c /usr/local/var/lib/cron
 
 nflx.sh
 radvdfix.sh
-#dhcp6update.sh
+echo RDY
