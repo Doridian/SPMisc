@@ -1,0 +1,16 @@
+#!/usr/bin/expect
+set timeout 20
+spawn telnet speedport.ip 23
+expect "Login:"
+send "USERNAME\n"
+expect "Password:"
+send "PASSWORD\n"
+expect "ATP>"
+send "sh\n"
+expect "BusyBox*"
+expect  "$"
+send "su\n"
+expect "#"
+send "sh /mnt/Verbatim_STORE_N_GO-18A57149_usb1_1/init.sh\n"
+expect "RDY"
+send "killall telnet_cli\n"
